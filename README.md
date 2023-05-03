@@ -42,8 +42,8 @@ The command finds all the generated pot (.po) files under the locale paths (LOCA
 Using a different Translation Service:
 
 ```python
-    # default: 'autotranslate.services.GoogleTranslatorService'
-    PO_TRANSLATOR_SERVICE = 'autotranslate.services.GoogleAPITranslatorService'
+    # default: 'django_po_translator.services.GoogleTranslatorService'
+    PO_TRANSLATOR_SERVICE = 'django_po_translator.services.GoogleAPITranslatorService'
     GOOGLE_TRANSLATE_KEY = '<google-api-key>'
 ```
 
@@ -54,14 +54,14 @@ Using a different Translation Service:
 
 | Service                        | Additional variables      | Description |
 | :---------------------------  | :--------------------    | :---------- |
-| GoogleAPITranslatorService     |    -          | - |
-| MicrosoftTranslatorService     | MICROSOFT_TRANSLATE_KEY | You need to require an api key if you want to use the microsoft translator. Visit the official website for more information about how to get one. Microsoft offers a free tier 0 subscription (2 million characters per month). |
-| PonsTranslatorService          | - | - |
-| MyMemoryTranslatorService      | - | - |
-| YandexTranslatorService        | YANDEX_TRANSLATE_KEY | You need to require a private api key if you want to use the yandex translator. Visit the official website for more information about how to get one |
-| PapagoTranslatorService        | PAPAGO_CLIENT_ID, PAPAGO_SECRET_KEY| You need to require a client id if you want to use the papago translator. Visit the official website for more information about how to get one. |
-| DeeplTranslatorService         | DEEPL_TRANSLATE_KEY | Visit https://www.deepl.com/en/docs-api/ for more information on how to generate your Deepl api key |
-| QcriTranslatorService          | QCRI_TRANSLATE_KEY | Visit https://mt.qcri.org/api/ for more information |
-| LibreTranslatorservice         | LIBRE_TRANSLATE_MIRROR_URL | Libre translate has multiple mirrors which can be used for the API endpoint. Some require an API key to be used. By default the base url is set to libretranslate.de . |
+| **GoogleAPITranslatorService**     |    -          | - |
+| **MicrosoftTranslatorService**     | `MICROSOFT_TRANSLATE_KEY` | You need to require an api key if you want to use the microsoft translator. Visit the official website for more information about how to get one. Microsoft offers a free tier 0 subscription (2 million characters per month). |
+| **PonsTranslatorService**          | - | - |
+| **MyMemoryTranslatorService**      | - | - |
+| **YandexTranslatorService**        | `YANDEX_TRANSLATE_KEY` | You need to require a private api key if you want to use the yandex translator. Visit the official website for more information about how to get one |
+| **PapagoTranslatorService**        | `PAPAGO_CLIENT_ID`, PAPAGO_SECRET_KEY| You need to require a client id if you want to use the papago translator. Visit the official website for more information about how to get one. |
+| **DeeplTranslatorService**         | `DEEPL_TRANSLATE_KEY` | Visit https://www.deepl.com/en/docs-api/ for more information on how to generate your Deepl api key |
+| **QcriTranslatorService**          | `QCRI_TRANSLATE_KEY` | Visit https://mt.qcri.org/api/ for more information |
+| **LibreTranslatorservice**         | `LIBRE_TRANSLATE_MIRROR_URL` | Libre translate has multiple mirrors which can be used for the API endpoint. Some require an API key to be used. By default the base url is set to libretranslate.de . |
 
  
