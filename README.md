@@ -1,8 +1,6 @@
-# django-deep-translator
+# django-deep-translator [![Upload Python Package](https://github.com/wmo-raf/django-deep-translator/actions/workflows/publish.yml/badge.svg)](https://github.com/wmo-raf/django-deep-translator/actions/workflows/publish.yml)
 
 Autotranslate django `.po` translation files package built on top of  [deep-translator](https://pypi.org/project/deep-translator/)
-
-[![][travis-ci]][travis] [![][pypi-version]][pypi] ![][requirements]
 
 ## Installation
 
