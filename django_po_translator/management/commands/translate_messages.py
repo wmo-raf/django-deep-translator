@@ -6,8 +6,8 @@ import polib
 from django.conf import settings
 from django.core.management.base import BaseCommand
 # from deep_translator import GoogleTranslator
-from django_po_translator.services import GoogleTranslatorService
-from django_po_translator.utils import get_translator
+from django_deep_translator.services import GoogleTranslatorService
+from django_deep_translator.utils import get_translator
 
 
 logger = logging.getLogger(__name__)

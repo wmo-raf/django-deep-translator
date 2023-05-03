@@ -1,19 +1,19 @@
-# django-po-translator
+# django-deep-translator
 
 Autotranslate django .po translation files package built on top of deep-translator https://pypi.org/project/deep-translator/
 
 ## Installation
 
 ```bash
-pip install django-po-translator
+pip install django-deep-translator
 ```
 
-Add `'django_po_translator'` to your `INSTALLED_APPS` setting:
+Add `'django_deep_translator'` to your `INSTALLED_APPS` setting:
 
 ```py
 INSTALLED_APPS = (
         ...
-        'django_po_translator',
+        'django_deep_translator',
     )
 
 ```
@@ -42,8 +42,8 @@ The command finds all the generated pot (.po) files under the locale paths (LOCA
 Using a different Translation Service:
 
 ```python
-    # default: 'django_po_translator.services.GoogleTranslatorService'
-    PO_TRANSLATOR_SERVICE = 'django_po_translator.services.GoogleAPITranslatorService'
+    # default: 'django_deep_translator.services.GoogleTranslatorService'
+    PO_TRANSLATOR_SERVICE = 'django_deep_translator.services.GoogleAPITranslatorService'
     GOOGLE_TRANSLATE_KEY = '<google-api-key>'
 ```
 

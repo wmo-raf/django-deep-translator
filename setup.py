@@ -26,8 +26,8 @@ install_requirements = parse_requirements(os.path.join(PROJECT_ROOT, 'requiremen
 requirements = [getattr(ir, 'requirement', str(getattr(ir, 'req', None))) for ir in install_requirements]
 
 setup(
-    name='django-po-translator',
-    version='1.2.0',
+    name='django-deep-translator',
+    version='1.3.0',
     packages=find_packages(),
     install_requires=requirements,
     include_package_data=True,
@@ -36,7 +36,7 @@ setup(
                 'makemessages command built on top of python deep-translator package',
     long_description=README,
     long_description_content_type='text/markdown',
-    url='https://github.com/wmo-raf/django-po-translator',
+    url='https://github.com/wmo-raf/django-deep-translator',
     author='Grace Amondi',
     author_email='miswa.grace@gmail.com',
     classifiers=[

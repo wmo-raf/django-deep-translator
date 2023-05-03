@@ -1,6 +1,6 @@
 import six
 
-from django_po_translator.compat import importlib
+from django_deep_translator.compat import importlib
 from django.conf import settings
 
 def perform_import(val, setting_name):
