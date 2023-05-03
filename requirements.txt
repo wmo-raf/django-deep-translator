@@ -1,0 +1,4 @@
+deep-translator>=1.10.1
+django
+polib
+six
