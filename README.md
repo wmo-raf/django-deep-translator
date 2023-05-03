@@ -1,6 +1,8 @@
 # django-deep-translator
 
-Autotranslate django .po translation files package built on top of deep-translator https://pypi.org/project/deep-translator/
+Autotranslate django `.po` translation files package built on top of  [deep-translator](https://pypi.org/project/deep-translator/)
+
+[![][travis-ci]][travis] [![][pypi-version]][pypi] ![][requirements]
 
 ## Installation
 
@@ -24,7 +26,7 @@ INSTALLED_APPS = (
 python manage.py translate_messages
 ```
 
-The command finds all the generated pot (.po) files under the locale paths (LOCALE_PATHS) specified in django project settings, and translates them automatically.
+The command finds all the generated pot (.po) files under the locale paths (LOCALE_PATHS) specified in django project settings, and translates them automatically with default source language as **english**.
 
 ## Options
 
@@ -38,6 +40,19 @@ The command finds all the generated pot (.po) files under the locale paths (LOCA
 ```
 
 ## Settings
+
+In your settings, list the relative path to locale folders, example:
+
+```py
+LOCALE_PATHS = (
+    'locale',
+    'home/locale',
+    'products/locale',
+    'services/locale',
+)
+```
+
+---
 
 Using a different Translation Service:
 
@@ -64,4 +79,3 @@ Using a different Translation Service:
 | **QcriTranslatorService**          | `QCRI_TRANSLATE_KEY` | Visit https://mt.qcri.org/api/ for more information |
 | **LibreTranslatorservice**         | `LIBRE_TRANSLATE_MIRROR_URL` | Libre translate has multiple mirrors which can be used for the API endpoint. Some require an API key to be used. By default the base url is set to libretranslate.de . |
 
- 
