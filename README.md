@@ -59,7 +59,7 @@ Using a different Translation Service:
 | **PonsTranslatorService**          | - | - |
 | **MyMemoryTranslatorService**      | - | - |
 | **YandexTranslatorService**        | `YANDEX_TRANSLATE_KEY` | You need to require a private api key if you want to use the yandex translator. Visit the official website for more information about how to get one |
-| **PapagoTranslatorService**        | `PAPAGO_CLIENT_ID`, PAPAGO_SECRET_KEY| You need to require a client id if you want to use the papago translator. Visit the official website for more information about how to get one. |
+| **PapagoTranslatorService**        | `PAPAGO_CLIENT_ID`, `PAPAGO_SECRET_KEY`| You need to require a client id if you want to use the papago translator. Visit the official website for more information about how to get one. |
 | **DeeplTranslatorService**         | `DEEPL_TRANSLATE_KEY` | Visit https://www.deepl.com/en/docs-api/ for more information on how to generate your Deepl api key |
 | **QcriTranslatorService**          | `QCRI_TRANSLATE_KEY` | Visit https://mt.qcri.org/api/ for more information |
 | **LibreTranslatorservice**         | `LIBRE_TRANSLATE_MIRROR_URL` | Libre translate has multiple mirrors which can be used for the API endpoint. Some require an API key to be used. By default the base url is set to libretranslate.de . |
