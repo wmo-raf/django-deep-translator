@@ -36,7 +36,7 @@ def get_translator():
     Returns the default translator.
     """
     TranslatorService = getattr(settings, 'PO_TRANSLATOR_SERVICE',
-                                'translator.services.GoogleTranslatorService')
+                                'django_deep_translator.services.GoogleTranslatorService')
     
     translator = perform_import(TranslatorService, 'PO_TRANSLATOR_SERVICE')()
     return translator
