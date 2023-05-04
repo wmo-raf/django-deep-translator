@@ -58,7 +58,6 @@ Using a different Translation Service:
 ```python
     # default: 'django_deep_translator.services.GoogleTranslatorService'
     PO_TRANSLATOR_SERVICE = 'django_deep_translator.services.GoogleAPITranslatorService'
-    GOOGLE_TRANSLATE_KEY = '<google-api-key>'
 ```
 
 ---
