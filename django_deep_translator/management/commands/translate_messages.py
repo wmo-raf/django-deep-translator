@@ -5,10 +5,8 @@ from optparse import make_option
 import polib
 from django.conf import settings
 from django.core.management.base import BaseCommand
-# from deep_translator import GoogleTranslator
-from django_deep_translator.services import GoogleTranslatorService
-from django_deep_translator.utils import get_translator
 
+from django_deep_translator.utils import get_translator
 
 logger = logging.getLogger(__name__)
 
@@ -59,13 +57,11 @@ class Command(BaseCommand):
         assert getattr(settings, 'USE_I18N', False), 'i18n framework is disabled'
         assert getattr(settings, 'LOCALE_PATHS', []), 'locale paths is not configured properly'
         for directory in settings.LOCALE_PATHS:
-            # walk through all the paths
-            # and find all the pot files
+            # walk through all the paths and find all the pot files
             for root, dirs, files in os.walk(directory):
                 for file in files:
                     if not file.endswith('.po'):
-                        # process file only
-                        # if its a pot file
+                        # process file only if it is a .po file
                         continue
 
                     # get the target language from the parent folder name
@@ -79,7 +75,7 @@ class Command(BaseCommand):
 
     def translate_file(self, root, file_name, target_language):
         """
-        convenience method for translating a pot file
+        convenience method for translating a po file
 
         :param root:            the absolute path of folder where the file is present
         :param file_name:       name of the file to be translated (it should be a pot file)
@@ -89,11 +85,14 @@ class Command(BaseCommand):
 
         po = polib.pofile(os.path.join(root, file_name))
         for entry in po:
-            if not entry.translated():
-                translation = get_translator()
-                entry.msgstr = translation.translate_string(text=entry.msgid,source_language=self.source_language, target_language=target_language)
-                if self.set_fuzzy:
-                    entry.flags.append('fuzzy')
+            # skip translated
+            if self.skip_translated and entry.translated():
+                continue
+
+            translation = get_translator()
+            entry.msgstr = translation.translate_string(text=entry.msgid, source_language=self.source_language,
+                                                        target_language=target_language)
+            if self.set_fuzzy:
+                entry.flags.append('fuzzy')
 
         po.save()
-
