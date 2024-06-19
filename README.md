@@ -33,6 +33,10 @@ The command finds all the generated pot (.po) files under the locale paths (LOCA
 - ``-l, --locale 'locale'``: Only translate the specified locales
 - ``-u, --untranslated``: Only translate the untranslated messages
 - ``-s, --source-language``: Override the default source language (en) used for translation
+- ``-S, --silent``: Don't show the verbose output
+- ``-t, --throttle``: Throttle the maximum of seconds for the next translate request(default=10 sec)
+         
+
 
 ```bash
     python manage.py translate_messages -l 'de' -l 'es'
