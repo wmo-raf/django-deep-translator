@@ -3,6 +3,7 @@ import os
 from optparse import make_option
 
 import polib
+from tqdm.auto import tqdm
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -31,10 +32,6 @@ class Command(BaseCommand):
     )
 
     def add_arguments(self, parser):
-        # Previously, only the standard optparse library was supported and
-        # you would have to extend the command option_list variable with optparse.make_option().
-        # See: https://docs.djangoproject.com/en/1.8/howto/custom-management-commands/#accepting-optional-arguments
-        # In django 1.8, these custom options can be added in the add_arguments()
         parser.add_argument('--locale', '-l', default=[], dest='locale', action='append',
                             help='autotranslate the message files for the given locale(s) (e.g. pt_BR). '
                                  'can be used multiple times.')
@@ -56,43 +53,74 @@ class Command(BaseCommand):
 
         assert getattr(settings, 'USE_I18N', False), 'i18n framework is disabled'
         assert getattr(settings, 'LOCALE_PATHS', []), 'locale paths is not configured properly'
-        for directory in settings.LOCALE_PATHS:
-            # walk through all the paths and find all the pot files
-            for root, dirs, files in os.walk(directory):
-                for file in files:
-                    if not file.endswith('.po'):
-                        # process file only if it is a .po file
-                        continue
 
-                    # get the target language from the parent folder name
-                    target_language = os.path.basename(os.path.dirname(root))
+        locale_paths = list(settings.LOCALE_PATHS)
+        logger.info(f"Found {len(locale_paths)} locale directory(ies). Starting translation...")
 
-                    if self.locale and target_language not in self.locale:
-                        logger.info('skipping translation for locale `{}`'.format(target_language))
-                        continue
+        # Outer progress bar: locales
+        with tqdm(total=len(locale_paths), desc="Locales", unit="locale", colour="cyan", ncols=100) as locale_bar:
+            for directory in locale_paths:
+                self.process_locale_directory(directory)
+                locale_bar.update(1)
 
-                    self.translate_file(root, file, target_language)
+    def process_locale_directory(self, directory):
+        """Process all .po files inside a locale directory."""
+        po_files_to_process = []
+        for root, dirs, files in os.walk(directory):
+            po_files = [f for f in files if f.endswith('.po')]
+            for file in po_files:
+                target_language = os.path.basename(os.path.dirname(root))
+                if self.locale and target_language not in self.locale:
+                    logger.info(f"Skipping locale `{target_language}` (not in selected locales).")
+                    continue
+                po_files_to_process.append((root, file, target_language))
+
+        if not po_files_to_process:
+            return
+
+        # Inner progress bar for files
+        with tqdm(total=len(po_files_to_process), desc=f"{os.path.basename(directory)} files", unit="file", colour="blue", ncols=100, leave=False) as file_bar:
+            for root, file, target_language in po_files_to_process:
+                self.translate_file(root, file, target_language)
+                file_bar.update(1)
 
     def translate_file(self, root, file_name, target_language):
-        """
-        convenience method for translating a po file
+        """Translate all entries in a .po file with progress feedback."""
+        file_path = os.path.join(root, file_name)
+        po = polib.pofile(file_path)
+        translator = get_translator()
 
-        :param root:            the absolute path of folder where the file is present
-        :param file_name:       name of the file to be translated (it should be a pot file)
-        :param target_language: language in which the file needs to be translated
-        """
-        logger.info('filling up translations for locale `{}`'.format(target_language))
+        entries_to_translate = [
+            e for e in po if not (self.skip_translated and e.translated())
+        ]
+        total = len(entries_to_translate)
 
-        po = polib.pofile(os.path.join(root, file_name))
-        for entry in po:
-            # skip translated
-            if self.skip_translated and entry.translated():
-                continue
+        if total == 0:
+            logger.info(f"No entries to translate for `{target_language}` in `{file_path}`.")
+            return
 
-            translation = get_translator()
-            entry.msgstr = translation.translate_string(text=entry.msgid, source_language=self.source_language,
-                                                        target_language=target_language)
-            if self.set_fuzzy:
-                entry.flags.append('fuzzy')
+        logger.info(f"Translating {total} entries for `{target_language}` ({file_path})...")
+
+        # Deepest level progress bar for entries
+        with tqdm(total=total, desc=f"→ {target_language}:{file_name}", unit="msg", colour="green", ncols=100, leave=False) as msg_bar:
+            for entry in entries_to_translate:
+                try:
+                    entry.msgstr = translator.translate_string(
+                        text=entry.msgid,
+                        source_language=self.source_language,
+                        target_language=target_language
+                    )
+                    if self.set_fuzzy:
+                        entry.flags.append('fuzzy')
+                    msg_bar.set_postfix({
+                        "progress": f"{msg_bar.n + 1}/{total}",
+                        "current": entry.msgid[:40] + ("..." if len(entry.msgid) > 40 else "")
+                    })
+                except Exception as e:
+                    logger.error(f"Failed to translate '{entry.msgid}': {e}")
+                    msg_bar.set_postfix_str("Error")
+                finally:
+                    msg_bar.update(1)
 
         po.save()
+        logger.info(f"✅ Saved translated file: {file_path}")
